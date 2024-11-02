@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <functional>  // For std::hash
 #include <unordered_map>
 #include <unordered_set>
 #include <fstream>
@@ -8,24 +9,36 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
 
+
 // Symbol class to represent individual symbols in the Turing Machine
 class Symbol {
  private:
   char value;
 
  public:
-  
   Symbol(char val) : value(val) {}
 
-  char getValue() { return value; }
+  char getValue() const { return value; }
+
   bool operator==(const Symbol& other) const {
     return value == other.value;
   }
+
   friend std::ostream& operator<<(std::ostream& os, const Symbol& symbol) {
     os << symbol.value;
     return os;
   }
 };
+
+// Hash specialization for the Symbol class
+namespace std {
+    template <>
+    struct hash<Symbol> {
+        std::size_t operator()(const Symbol& s) const noexcept {
+            return std::hash<char>{}(s.getValue());
+        }
+    };
+} 
 
 // Alphabet class to handle input and tape symbols
 class Alphabet {
@@ -56,8 +69,12 @@ class State {
   bool isAccepting;
 
  public:
+ // Default constructor
+  State() : name_(""), isAccepting(false) {}
+
   State(std::string name, bool accepting = false) : name_(name), isAccepting(accepting) {}
   bool checkAcceptance() const { return isAccepting; }
+  void setAcceptance(bool accepting) { isAccepting = accepting; }
 };
 
 // Transition class to represent each transition (δ)
@@ -68,7 +85,10 @@ class Transition {
   std::string nextState;
   Symbol writeSymbol;
   char movement; // 'L' for left, 'R' for right, 'S' for stationary
+
  public:
+
+  Transition() : currentState(""), readSymbol(' '), nextState(""), writeSymbol(' '), movement(' ') {}
 
   Transition(std::string curr, Symbol read, std::string next, char write, char move)
   : currentState(curr), readSymbol(read), nextState(std::move(next)), writeSymbol(write), movement(move) {}

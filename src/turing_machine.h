@@ -20,6 +20,7 @@ public:
   TuringMachine(const Alphabet& alpha, const Tape& initialTape, const std::unordered_map<std::string, Transition>& trans, const std::string& startState)
     : alphabet(alpha), tape(initialTape), transitions(trans), currentState(startState) {}
 
+  Tape getTape() const { return tape; }
   bool execute() {
     while (true) {
       Symbol readSymbol = tape.read();
@@ -43,13 +44,13 @@ public:
 };
 
 // Function to load the Turing Machine from a configuration file
-TuringMachine loadMachine(const std::string& filename) {
+TuringMachine loadMachine(const std::string& filename, std::vector<Symbol>& input) {
   std::ifstream file(filename);
   std::string line;
   std::unordered_set<Symbol> inputSymbols, tapeSymbols;
   std::unordered_map<std::string, Transition> transitions;
   std::unordered_map<std::string, State> states;
-  std::string initialState;
+  std::string initialState, finalState;
   char blankSymbol;
 
   std::cout << "Loading Turing Machine from file: " << filename << std::endl;
@@ -102,13 +103,24 @@ TuringMachine loadMachine(const std::string& filename) {
       blankSymbol = symbol;
       std::cout << "Blank symbol set to: " << symbol << std::endl;
       section++;
-    } else if (section == 5) { // Reading transitions
+    } else if (section == 5) { // Reading final state
+      std::string state;
+      iss >> state;
+      if (states.find(state) != states.end()) {
+        states[state].setAcceptance(true);
+        std::cout << "Final state set to: " << state << std::endl;
+        section++;
+      } else {
+        std::cerr << "Error: Final state not found in the list of states." << std::endl;
+        exit(1);
+      }
+    } else if (section == 6) { // Reading transitions
       std::cout << "Reading transitions..." << std::endl;
       std::string currentState, nextState;
       char readSymbol, writeSymbol, movement;
-      while (iss >> currentState >> readSymbol >> writeSymbol >> movement >> nextState) {
+      while (iss >> currentState >> readSymbol >> nextState >> writeSymbol >> movement ) {
         if (states.find(currentState) == states.end() || states.find(nextState) == states.end()) {
-          std::cerr << "Error: State not found in the list of states." << std::endl;
+          std::cerr << "Error: State not found in the list of states." << currentState << std::endl;
           exit(1);
         }
         if (tapeSymbols.find(Symbol(readSymbol)) == tapeSymbols.end() || tapeSymbols.find(Symbol(writeSymbol)) == tapeSymbols.end()) {
@@ -123,7 +135,7 @@ TuringMachine loadMachine(const std::string& filename) {
   }
 
   Alphabet alphabet(inputSymbols, tapeSymbols, blankSymbol);
-  Tape tape(inputSymbols, blankSymbol);
+  Tape tape(input, blankSymbol);
   TuringMachine machine(alphabet, tape, transitions, initialState);
 
   std::cout << "Turing Machine initialization completed." << std::endl;

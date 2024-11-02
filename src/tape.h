@@ -43,6 +43,7 @@ public:
   }
 
   void printTape() const {
+    std::cout << std::endl;
     for (Symbol cell : tape) {
       std::cout << cell;
     }
