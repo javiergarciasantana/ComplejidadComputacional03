@@ -17,8 +17,8 @@ class TuringMachine {
   std::string currentState;
 
 public:
-  TuringMachine(const Alphabet& alpha, const Tape& initialTape, const std::unordered_map<std::string, Transition>& trans, const std::string& startState)
-    : alphabet(alpha), tape(initialTape), transitions(trans), currentState(startState) {}
+  TuringMachine(const Alphabet& alpha, const Tape& initialTape, const std::unordered_map<std::string, Transition>& trans, const std::string& startState, const std::unordered_map<std::string, State>& st) 
+    : alphabet(alpha), tape(initialTape), transitions(trans), currentState(startState), states(st) {}
 
   Tape getTape() const { return tape; }
   bool execute() {
@@ -27,12 +27,12 @@ public:
       std::string key = currentState + readSymbol.getValue();
 
       
-      
       std::cout << "Current state: " << currentState << ", Read symbol: " << readSymbol.getValue() << std::endl;
+      
 
       if (transitions.find(key) == transitions.end()) {
         // No transition found, halt
-        std::cout << "No transition found for key: " << key << ". Halting." << std::endl;
+        std::cout << "\nNo transition found for key: " << key << ". Halting." << std::endl;
         return false;
       }
 
@@ -45,7 +45,7 @@ public:
       currentState = transition.getNextState();
 
       if (states[currentState].checkAcceptance()) {
-        std::cout << "Reached acceptance state: " << currentState << ". Halting." << std::endl;
+        std::cout << "\nReached acceptance state: " << currentState << std::endl;
         return true;
       }
     }
@@ -116,7 +116,7 @@ TuringMachine loadMachine(const std::string& filename, std::vector<Symbol>& inpu
         std::string state;
         iss >> state;
         if (states.find(state) != states.end()) {
-        states[state].setAcceptance(true);
+        states[state].setAcceptance(1);
         std::cout << "Final state set to: " << state << std::endl;
         section++;
         } else {
@@ -145,9 +145,9 @@ TuringMachine loadMachine(const std::string& filename, std::vector<Symbol>& inpu
 
   Alphabet alphabet(inputSymbols, tapeSymbols, blankSymbol);
   Tape tape(input, blankSymbol);
-  TuringMachine machine(alphabet, tape, transitions, initialState);
+  TuringMachine machine(alphabet, tape, transitions, initialState, states);
 
-  std::cout << "Turing Machine initialization completed." << std::endl;
+  std::cout << "Turing Machine initialization completed.\n" << std::endl;
   return machine;
 }
 

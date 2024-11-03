@@ -13,11 +13,11 @@ int main(int argc, char* argv[]) {
   TuringMachine tm = loadMachine(std::string(argv[1]), inputSymbols);
  
   if (tm.execute()) {
-    std::cout << "\nAccepted." << std::endl;
+    std::cout << "Accepted." << std::endl;
   } else {
-    std::cout << "\nRejected." << std::endl;
+    std::cout << "Rejected." << std::endl;
   }
-  
+
   tm.getTape().printTape();
   return 0;
 }
