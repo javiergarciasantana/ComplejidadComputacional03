@@ -25,18 +25,27 @@ public:
     while (true) {
       Symbol readSymbol = tape.read();
       std::string key = currentState + readSymbol.getValue();
+
       
+      
+      std::cout << "Current state: " << currentState << ", Read symbol: " << readSymbol.getValue() << std::endl;
+
       if (transitions.find(key) == transitions.end()) {
         // No transition found, halt
+        std::cout << "No transition found for key: " << key << ". Halting." << std::endl;
         return false;
       }
 
       Transition transition = transitions[key];
+      std::cout << "Transition: (" << currentState << ", " << readSymbol.getValue() << ") -> ("
+                << transition.getNextState() << ", " << transition.getWriteSymbol() << ", " << transition.getMovement() << ")" << std::endl;
+
       tape.write(transition.getWriteSymbol());
       tape.moveHead(transition.getMovement());
       currentState = transition.getNextState();
 
       if (states[currentState].checkAcceptance()) {
+        std::cout << "Reached acceptance state: " << currentState << ". Halting." << std::endl;
         return true;
       }
     }
@@ -104,13 +113,13 @@ TuringMachine loadMachine(const std::string& filename, std::vector<Symbol>& inpu
       std::cout << "Blank symbol set to: " << symbol << std::endl;
       section++;
     } else if (section == 5) { // Reading final state
-      std::string state;
-      iss >> state;
-      if (states.find(state) != states.end()) {
+        std::string state;
+        iss >> state;
+        if (states.find(state) != states.end()) {
         states[state].setAcceptance(true);
         std::cout << "Final state set to: " << state << std::endl;
         section++;
-      } else {
+        } else {
         std::cerr << "Error: Final state not found in the list of states." << std::endl;
         exit(1);
       }

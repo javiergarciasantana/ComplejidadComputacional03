@@ -17,6 +17,7 @@ int main(int argc, char* argv[]) {
   } else {
     std::cout << "\nRejected." << std::endl;
   }
+  
   tm.getTape().printTape();
   return 0;
 }
