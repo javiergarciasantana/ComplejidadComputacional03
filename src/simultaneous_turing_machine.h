@@ -1,3 +1,13 @@
+// AUTOR: Javier Garcia Santana
+// FECHA: 29/10/2024
+// EMAIL: alu0101391663@ull.edu.es
+// VERSION: 4.0
+// ASIGNATURA: Complejidad Computacional
+// PRÁCTICA Nº: 3
+// COMENTARIOS: Fichero .h en el que se instancia la clase SimultaneousTuringMachine
+//
+// COMPILACIÓN: make || g++ -std=c++111 -o turnig turing_machine_main.cc
+
 #include <fstream>
 #include <sstream>
 

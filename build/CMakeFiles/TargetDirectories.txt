@@ -1,0 +1,3 @@
+/Users/javiersantana/INF 2024:2025/Complejidad Computacional/ComplejidadComputacional03/build/CMakeFiles/turing.dir
+/Users/javiersantana/INF 2024:2025/Complejidad Computacional/ComplejidadComputacional03/build/CMakeFiles/edit_cache.dir
+/Users/javiersantana/INF 2024:2025/Complejidad Computacional/ComplejidadComputacional03/build/CMakeFiles/rebuild_cache.dir

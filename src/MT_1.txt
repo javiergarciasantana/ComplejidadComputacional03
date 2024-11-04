@@ -1,0 +1,2 @@
+# MT que reconoce el lenguage:
+# L = {a^n b^m}
