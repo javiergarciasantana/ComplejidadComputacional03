@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "turing_machine.h"
+#include "simultaneous_turing_machine.h"
 
 int main(int argc, char* argv[]) {
   std::string input;
@@ -10,14 +10,14 @@ int main(int argc, char* argv[]) {
   for (char ch : input) {
     inputSymbols.push_back(Symbol(ch));
   }
-  TuringMachine tm = loadMachine(std::string(argv[1]), inputSymbols);
+  TuringMachine* tm = loadSimultaneousMachine(std::string(argv[1]), inputSymbols);
  
-  if (tm.execute()) {
+  if (tm->execute()) {
     std::cout << "Accepted." << std::endl;
   } else {
     std::cout << "Rejected." << std::endl;
   }
 
-  tm.getTape().printTape();
+  tm->getTape().printTape();
   return 0;
 }
