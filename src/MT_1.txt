@@ -1,2 +1,36 @@
-# MT que reconoce el lenguage:
-# L = {a^n b^m}
+# States
+q0 q1 q2 q3 q4 q5
+
+# Input Alphabet
+a b
+
+# Tape Alphabet
+a b X Y .
+
+# Initial State
+q0
+
+# Blank Symbol
+.
+
+# Final State
+q5
+
+# Transitions
+
+q0 a q1 X R
+q0 Y q3 Y R
+
+q1 a q1 a R
+q1 Y q1 Y R
+q1 b q2 Y L
+
+q2 X q0 X R
+q2 Y q2 Y L
+q2 a q2 a L
+
+q3 Y q3 Y R
+q3 b q4 b R
+
+q4 b q4 b R
+q4 . q5 . L 

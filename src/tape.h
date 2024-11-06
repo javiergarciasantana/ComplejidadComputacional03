@@ -43,7 +43,11 @@ public:
 
   void moveHead(char direction) {
     if (direction == 'L') {
-      if (headPosition > 0) headPosition--;
+      if (headPosition > 0) {
+        headPosition--;
+      } else {
+        tape.insert(tape.begin(), blankSymbol);
+      }
     } else if (direction == 'R') {
       headPosition++;
       if (headPosition >= tape.size()) {
