@@ -6,7 +6,7 @@
 // PRÁCTICA Nº: 3
 // COMENTARIOS: Fichero .h en el que se instancia la clase Tape
 //
-// COMPILACIÓN: make || g++ -std=c++111 -o turnig turing_machine_main.cc
+// COMPILACIÓN: make || g++ -std=c++11 -o turnig turing_machine_main.cc
 
 #include <vector>
 #include <string>

@@ -99,9 +99,18 @@ TuringMachine* loadSimultaneousMachine(const std::string& filename, std::vector<
       std::cout << "Reading tape alphabet..." << std::endl;
       char symbol;
       while (iss >> symbol) {
-        tapeSymbols.insert(Symbol(symbol));
-        std::cout << "Tape symbol added: " << symbol << std::endl;
+        if (symbol != '.') {
+          tapeSymbols.insert(Symbol(symbol));
+          std::cout << "Tape symbol added: " << symbol << std::endl;
+        }
       }
+      
+      // Ensure input symbols and tape symbols have the same size
+      if (inputSymbols.size() != tapeSymbols.size()) {
+        std::cerr << "Error: Tape symbol not present in alphabet." << std::endl;
+        exit(1);
+      }
+      tapeSymbols.insert(Symbol('.'));
       section++;
     } else if (section == 3) { // Reading initial state
       std::string state;
@@ -144,9 +153,15 @@ TuringMachine* loadSimultaneousMachine(const std::string& filename, std::vector<
           std::cerr << "Error: Tape symbol not found in the list of tape symbols." << std::endl;
           exit(1);
         }
-        transitions[currentState + readSymbol] = Transition(currentState, Symbol(readSymbol), nextState, writeSymbol, movement);
-        std::cout << "Transition added: (" << currentState << ", " << readSymbol << ") -> ("
-                  << nextState << ", " << writeSymbol << ", " << movement << ")" << std::endl;
+        std::cout << "Move:" << movement << std::endl;
+        if (movement == 'L' || movement == 'R') {
+          transitions[currentState + readSymbol] = Transition(currentState, Symbol(readSymbol), nextState, writeSymbol, movement);
+          std::cout << "Transition added: (" << currentState << ", " << readSymbol << ") -> ("
+                    << nextState << ", " << writeSymbol << ", " << movement << ")" << std::endl;
+        } else {
+          std::cerr << "Error: Movement must be 'L' or 'R'." << std::endl;
+          exit(1);
+        }
       }
     }
   }
